@@ -16,6 +16,13 @@ label1='IBU'
 label2='ABV'
 githublink='https://github.com/decotoj/dash_app_demo'
 sourceurl='https://www.flyingdog.com/beers/'
+tlefile = 'tle.txt'
+
+#TEST1234
+with open(tlefile, 'r') as f:
+    ln = f.readlines()
+beers[0] = ln[0]
+#TEST1234
 
 ########### Set up the chart
 bitterness = go.Bar(
