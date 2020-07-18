@@ -14,7 +14,7 @@ from collections import defaultdict
 
 # GEO Display - Future Enhancements
 # 1. Intuitive Colors by Country 
-# 2. Better filtering of data for user selected selector bar
+# 2. More efficient filtering of data for user selected selector bar
 
 # Config
 tabtitle='GEO Satellites'
@@ -22,11 +22,27 @@ myheading='GEO Environment'
 githublink='https://github.com/decotoj/dash_app_demo'
 sourceurl='https://celestrak.com/'
 dataFile = 'data.csv'
-sliderCategories = ['All', 'US','Russia', 'China', 'Other']
-sliderValues =[0,1,2,3,4]
+sliderCategories = ['All', 'US','Russia', 'China']
+sliderValues =[0,1,2,3]
 
 # Import Data
 df = pandas.read_csv(dataFile)
+
+# Apply Filter
+df_rus = defaultdict(list)
+indices = [i for i in range(len(df['id'])) if df['operator'][i].strip() == 'Russia']
+for k in df.keys():
+    df_rus [k] = [df[k][i] for i in indices]
+
+df_us = defaultdict(list)
+indices = [i for i in range(len(df['id'])) if df['operator'][i].strip() == 'US']
+for k in df.keys():
+    df_us [k] = [df[k][i] for i in indices]
+
+df_chi = defaultdict(list)
+indices = [i for i in range(len(df['id'])) if df['operator'][i].strip() == 'China']
+for k in df.keys():
+    df_chi [k] = [df[k][i] for i in indices]
 
 # Initiate App
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -62,26 +78,28 @@ app.layout = html.Div(children=[
 # Plot/Chart
 def update_figure(selected_operator):
 
-    # Apply Filter
+    # # Apply Filter
     selected_operator = sliderCategories[selected_operator]
-    if selected_operator != 'All':
-        df2 = defaultdict(list)
-        indices = [i for i in range(len(df['id'])) if df['operator'][i].strip() == selected_operator]
-        for k in df.keys():
-            df2[k] = [df[k][i] for i in indices]
-    else:
-        df2 = df.copy()
+
+    if selected_operator == 'All':
+        df2 = df
+    elif selected_operator == 'Russia':
+        df2 = df_rus
+    elif selected_operator == 'US':
+        df2 = df_us
+    elif selected_operator == 'China':
+        df2 = df_chi
 
     fig = px.line(df2, x='lon', y='altRelGEO', 
-                     color = 'operator', hover_name='name', line_group='name',
-                     labels={
-                     "lon": "Longitude (deg)",
-                     "altRelGEO": "Altitude Relative to GEO (km)",
-                     "operator": "Operator",
-                     "id": "Norad ID"
+                    color = 'operator', hover_name='name', line_group='name',
+                    labels={
+                    "lon": "Longitude (deg)",
+                    "altRelGEO": "Altitude Relative to GEO (km)",
+                    "operator": "Operator",
+                    "id": "Norad ID"
                         },
-                     hover_data=["id", "operator", "lon", "altRelGEO"]
-                     )
+                    hover_data=["id", "operator", "lon", "altRelGEO"]
+                    )
 
     fig.update_layout(transition_duration=500)
 
