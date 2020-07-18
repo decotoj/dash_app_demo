@@ -22,27 +22,29 @@ myheading='GEO Environment'
 githublink='https://github.com/decotoj/dash_app_demo'
 sourceurl='https://celestrak.com/'
 dataFile = 'data.csv'
-sliderCategories = ['All', 'US','Russia', 'China']
-sliderValues =[0,1,2,3]
+#sliderCategories = ['All', 'US','Russia', 'China']
+sliderCategories = ['All']
+#sliderValues =[0,1,2,3]
+sliderValues =[0]
 
 # Import Data
 df = pandas.read_csv(dataFile)
 
-# Apply Filter
-df_rus = defaultdict(list)
-indices = [i for i in range(len(df['id'])) if df['operator'][i].strip() == 'Russia']
-for k in df.keys():
-    df_rus [k] = [df[k][i] for i in indices]
+# # Apply Filter
+# df_rus = defaultdict(list)
+# indices = [i for i in range(len(df['id'])) if df['operator'][i].strip() == 'Russia']
+# for k in df.keys():
+#     df_rus [k] = [df[k][i] for i in indices]
 
-df_us = defaultdict(list)
-indices = [i for i in range(len(df['id'])) if df['operator'][i].strip() == 'US']
-for k in df.keys():
-    df_us [k] = [df[k][i] for i in indices]
+# df_us = defaultdict(list)
+# indices = [i for i in range(len(df['id'])) if df['operator'][i].strip() == 'US']
+# for k in df.keys():
+#     df_us [k] = [df[k][i] for i in indices]
 
-df_chi = defaultdict(list)
-indices = [i for i in range(len(df['id'])) if df['operator'][i].strip() == 'China']
-for k in df.keys():
-    df_chi [k] = [df[k][i] for i in indices]
+# df_chi = defaultdict(list)
+# indices = [i for i in range(len(df['id'])) if df['operator'][i].strip() == 'China']
+# for k in df.keys():
+#     df_chi [k] = [df[k][i] for i in indices]
 
 # Initiate App
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -81,16 +83,16 @@ def update_figure(selected_operator):
     # # Apply Filter
     selected_operator = sliderCategories[selected_operator]
 
-    if selected_operator == 'All':
-        df2 = df
-    elif selected_operator == 'Russia':
-        df2 = df_rus
-    elif selected_operator == 'US':
-        df2 = df_us
-    elif selected_operator == 'China':
-        df2 = df_chi
+    # if selected_operator == 'All':
+    #     df2 = df
+    # elif selected_operator == 'Russia':
+    #     df2 = df_rus
+    # elif selected_operator == 'US':
+    #     df2 = df_us
+    # elif selected_operator == 'China':
+    #     df2 = df_chi
 
-    fig = px.line(df2, x='lon', y='altRelGEO', 
+    fig = px.line(df, x='lon', y='altRelGEO', 
                     color = 'operator', hover_name='name', line_group='name',
                     labels={
                     "lon": "Longitude (deg)",
