@@ -22,14 +22,9 @@ myheading='GEO Environment'
 githublink='https://github.com/decotoj/dash_app_demo'
 sourceurl='https://celestrak.com/'
 dataFile = 'data.csv'
-#sliderCategories = ['All', 'US','Russia', 'China']
-sliderCategories = ['All']
-#sliderValues =[0,1,2,3]
-sliderValues =[0]
 
 # Import Data
 df = pandas.read_csv(dataFile)
-
 
 # Initiate App
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -50,11 +45,9 @@ fig = px.line(df, x='lon', y='altRelGEO',
                 )
 
 # App Layout
-app.layout = html.Div(children=[
-    html.H1(myheading),
-    dcc.Graph(
-        id='geo', figure=fig
-    ),
+app.layout = html.Div(style = {'backgroundColor': 'black', 'padding': '0px 20px 20px 20px'}, children=[
+    html.H1(myheading, style = {'color': 'white'}),
+    dcc.Graph(id='geo', figure=fig),
     html.A('Code on Github', href=githublink),
     html.Br(),
     html.A('Data Source', href=sourceurl),
